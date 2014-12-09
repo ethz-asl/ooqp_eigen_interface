@@ -6,17 +6,17 @@ Overview
 
 This C++ software provides a simple interface to use [OOQP] with the [Eigen] linear algebra library.
 
-The Object Oriented Quadratic Programming solver package ([OOQP]) is written by Mike Gertz and Steve Wright from the University of Chicago ([copyright notice](http://pages.cs.wisc.edu/~swright/ooqp/COPYRIGHT.html)). This software is an independent interface to the OOQP library and is not affiliated with OOQP in any way.
+*The Object Oriented Quadratic Programming solver package ([OOQP]) is written by Mike Gertz and Steve Wright from the University of Chicago ([copyright notice](http://pages.cs.wisc.edu/~swright/ooqp/COPYRIGHT.html)). This software is an independent interface to the OOQP library and is not affiliated with OOQP in any way.*
 
-**Authors: Péter Fankhauser, Christian Gehring, Stelian Coros<br />
+**Authors: Péter Fankhauser, Christian Gehring, Stelian Coros**<br />
 Contact: Péter Fankhauser, pfankhauser@ethz.ch<br />
-Affiliation: Autonomous Systems Lab, ETH Zurich**
+Affiliation: Autonomous Systems Lab, ETH Zurich
 
 ### Links
 
 * [OOQP User Guide](http://pages.cs.wisc.edu/~swright/ooqp/ooqp-userguide.pdf)
 * [OOQP Paper](http://pages.cs.wisc.edu/~swright/ooqp/ooqp-paper.pdf)
-* The MA27 documentation is under 'ma27-1.0.0.tar.gz -> /doc/ma27_Fortran.pdf'
+* The MA27 documentation is under `ma27-1.0.0.tar.gz -> /doc/ma27_Fortran.pdf`
 
 
 Installation
