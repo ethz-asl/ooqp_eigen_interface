@@ -159,3 +159,18 @@ TEST(OOQPEITest, LinearProgrammingWithInequalityConstraints)
 
   expectNear(x, solution, 1e-8, OOQPEI_SOURCE_FILE_POS);
 }
+
+TEST(OOQPEITest, NaN)
+{
+  SparseMatrix<double, Eigen::RowMajor> Q;
+  Q.resize(2, 2);
+  Q.insert(0, 0) = NAN;
+  Q.insert(0, 1) = NAN;
+  Q.insert(1, 0) = NAN;
+  Q.insert(1, 1) = NAN;
+  VectorXd c(2);
+  c << NAN, NAN;
+  VectorXd x;
+
+  EXPECT_TRUE(ooqpei::OoqpEigenInterface::solve(Q, c, x));
+}

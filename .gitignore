@@ -39,6 +39,7 @@
 # gTest
 /gtest*/
 gtest
+/Debug/
 
 # Generated files
 FindOOQPEI.cmake
