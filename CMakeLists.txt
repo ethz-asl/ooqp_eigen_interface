@@ -111,11 +111,11 @@ file(WRITE cmake/FindOOQPEI.cmake
 set(OOQPEI_INCLUDE_DIRS
   ${CMAKE_INSTALL_PREFIX}/include/OOQPEI/include
 )
-set(OOQEI_LIBRARIES
+set(OOQPEI_LIBRARIES
   ooqpei 
   ${OOQPEI_LIBS}
 )
-set(OOQEI_FOUND TRUE)
+set(OOQPEI_FOUND TRUE)
 "
 )
 
