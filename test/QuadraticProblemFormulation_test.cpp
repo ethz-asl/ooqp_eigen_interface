@@ -40,8 +40,8 @@
 */
 
 #include <gtest/gtest.h>
-#include "QuadraticProblemFormulation.hpp"
-#include "ooqpei_gtest_eigen.hpp"
+#include "ooqp_eigen_interface/QuadraticProblemFormulation.hpp"
+#include "ooqp_eigen_interface/ooqpei_gtest_eigen.hpp"
 #include <Eigen/Core>
 
 using namespace Eigen;

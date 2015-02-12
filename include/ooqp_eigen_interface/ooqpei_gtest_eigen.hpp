@@ -11,7 +11,7 @@
 #define OOQPEI_EIGEN_GTEST_HPP
 
 #include <gtest/gtest.h>
-#include <ooqpei_source_file_pos.hpp>
+#include <ooqp_eigen_interface/ooqpei_source_file_pos.hpp>
 #include <Eigen/Core>
 
 namespace ooqpei { namespace eigen {

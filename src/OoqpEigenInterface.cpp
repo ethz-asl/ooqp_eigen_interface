@@ -39,16 +39,16 @@
 * @date    Aug 13, 2013
 */
 
-#include "OoqpEigenInterface.hpp"
+#include "ooqp_eigen_interface/OoqpEigenInterface.hpp"
 #include <stdexcept>
-#include "ooqpei_assert_macros.hpp"
+#include "ooqp_eigen_interface/ooqpei_assert_macros.hpp"
 #include "QpGenData.h"
 #include "QpGenVars.h"
 #include "QpGenResiduals.h"
 #include "GondzioSolver.h"
 #include "QpGenSparseMa27.h"
 #include "Status.h"
-#include "ooqpei_numerical_comparisons.hpp"
+#include "ooqp_eigen_interface/ooqpei_numerical_comparisons.hpp"
 
 using namespace Eigen;
 using namespace std;
