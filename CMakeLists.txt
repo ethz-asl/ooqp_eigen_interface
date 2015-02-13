@@ -33,98 +33,51 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #-------------------------------------------------------------------------------
 
-# Author(s): Peter Fankhauser
+# Author(s): Peter Fankhauser, Christian Gehring
 # Date     : Sep 9, 2013
 
-cmake_minimum_required (VERSION 2.6)  
 
-add_definitions(-std=c++0x)
-set(CMAKE_CXX_FLAGS "-fPIC")
+cmake_minimum_required(VERSION 2.8.3)
+project(ooqp_eigen_interface)
 
-# Set Build Type
-#   * None (CMAKE_C_FLAGS or CMAKE_CXX_FLAGS used)
-#   * Debug (CMAKE_C_FLAGS_DEBUG or CMAKE_CXX_FLAGS_DEBUG)
-#   * Release (CMAKE_C_FLAGS_RELEASE or CMAKE_CXX_FLAGS_RELEASE)
-#   * RelWithDebInfo (CMAKE_C_FLAGS_RELWITHDEBINFO or CMAKE_CXX_FLAGS_RELWITHDEBINFO
-#   * MinSizeRel (CMAKE_C_FLAGS_MINSIZEREL or CMAKE_CXX_FLAGS_MINSIZEREL) 
+add_definitions(-std=c++11)
 
-# Noisily default to Release build
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-	message(STATUS "Setting build type to 'Release' as none was specified.")
-	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
-
-# Set output paths
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-
-# CMake modules
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-find_package(Eigen REQUIRED)
-
-# Setup testing
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/gtest/")
-	message(STATUS "Building GTests!")
-	option(BUILD_GTEST "build gtest" ON)
-	add_subdirectory(gtest gtest)
-	enable_testing()
-endif()
-
-###############
-### SOURCES ###
-###############
-set(OOQPEI_SRCS 
-	${CMAKE_CURRENT_SOURCE_DIR}/src/OoqpEigenInterface.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/QuadraticProblemFormulation.cpp 
+find_package(Eigen3 REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+    ooqp_catkin
 )
 
-################
-### INCLUDES ###
-################
-set(OOQPEI_INCL
-  	${CMAKE_CURRENT_SOURCE_DIR}/include
-  	/usr/include/suitesparse
-	/usr/local/include/ooqp
-	${EIGEN_INCLUDE_DIRS}
-	#/usr/include/tcl8.5
+catkin_package(
+  INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
+  LIBRARIES ooqpei
+  CATKIN_DEPENDS ooqp_catkin
+  DEPENDS 
 )
 
-#################
-### LIBRARIES ###
-#################
-set(OOQPEI_LIBS 
-	ooqpgensparse ooqpsparse ooqpgondzio ooqpbase blas ma27 gfortran
-)	
+include_directories(include)
+include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(${catkin_INCLUDE_DIRS})
 
-#################
-### UTILITIES ###
-#################
-include_directories(${OOQPEI_INCL})
-include_directories(${EIGEN_INCLUDE_DIRS})
-add_library(ooqpei ${OOQPEI_SRCS} )
-target_link_libraries(ooqpei ${OOQPEI_LIBS} )
-
-# Generate FindOOQPEI.cmake file
-file(WRITE cmake/FindOOQPEI.cmake
-"
-set(OOQPEI_INCLUDE_DIRS
-  ${CMAKE_INSTALL_PREFIX}/include/OOQPEI/include
+add_library(ooqpei 
+	src/OoqpEigenInterface.cpp
+	src/QuadraticProblemFormulation.cpp 
 )
-set(OOQPEI_LIBRARIES
-  ooqpei 
-  ${OOQPEI_LIBS}
-)
-set(OOQPEI_FOUND TRUE)
-"
+add_dependencies(ooqpei ooqp_catkin)
+target_link_libraries(ooqpei 
+    ${catkin_LIBRARIES}
 )
 
-# Setting for make install
-install(TARGETS ooqpei DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INSTALL_PREFIX}/include/OOQPEI)")
-install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX}/include/OOQPEI)
-install(FILES cmake/FindOOQPEI.cmake DESTINATION ${CMAKE_ROOT}/Modules)
+install(TARGETS ooqpei
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
 
-if(BUILD_GTEST)
-	add_subdirectory(test)
-endif()
+install(DIRECTORY include/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+catkin_add_gtest(test_ooqpei 
+    test/test_main.cpp
+    test/OoqpEigenInterface_test.cpp
+    test/QuadraticProblemFormulation_test.cpp
+)
+target_link_libraries(test_ooqpei ooqpei)

@@ -39,10 +39,10 @@
 * @date    Aug 16, 2013
 */
 
-#include "QuadraticProblemFormulation.hpp"
-#include "ooqpei_assert_macros.hpp"
+#include "ooqp_eigen_interface/QuadraticProblemFormulation.hpp"
+#include "ooqp_eigen_interface/ooqpei_assert_macros.hpp"
 #include <stdexcept>
-#include "OoqpEigenInterface.hpp"
+#include "ooqp_eigen_interface/OoqpEigenInterface.hpp"
 
 using namespace Eigen;
 using namespace std;

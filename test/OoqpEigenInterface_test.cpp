@@ -40,8 +40,8 @@
 */
 
 #include <gtest/gtest.h>
-#include "OoqpEigenInterface.hpp"
-#include "ooqpei_gtest_eigen.hpp"
+#include "ooqp_eigen_interface/OoqpEigenInterface.hpp"
+#include "ooqp_eigen_interface/ooqpei_gtest_eigen.hpp"
 #include <Eigen/Core>
 #include <Eigen/SparseCore>
 

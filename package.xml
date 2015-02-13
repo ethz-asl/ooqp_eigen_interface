@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <name>ooqp_eigen_interface</name>
+  <version>0.0.0</version>
+  <description>ooqp_eigen_interface</description>
+  <maintainer email="pfankhauser@ethz.ch">Péter Fankhauser</maintainer>
+  <license>BSD</license>
+  <author email="pfankhauser@ethz.ch">Péter Fankhauser</author>
+  <author email="gehrinch@ethz.ch">Christian Gehring</author>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>eigen</build_depend>
+  <build_depend>ooqp_catkin</build_depend>
+  <run_depend>ooqp_catkin</run_depend>
+  <test_depend>gtest</test_depend>
+</package>
