@@ -43,17 +43,18 @@ project(ooqp_eigen_interface)
 add_definitions(-std=c++11)
 
 find_package(Eigen3 REQUIRED)
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+    ooqp_catkin
+)
 
 catkin_package(
-  INCLUDE_DIRS include /usr/local/include/ooqp ${EIGEN3_INCLUDE_DIR}
+  INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
   LIBRARIES ooqpei
-  CATKIN_DEPENDS
-  DEPENDS ooqpei ooqpgensparse ooqpsparse ooqpgondzio ooqpbase blas ma27 gfortran
+  CATKIN_DEPENDS ooqp_catkin
+  DEPENDS 
 )
 
 include_directories(include)
-include_directories(/usr/local/include/ooqp)
 include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(${catkin_INCLUDE_DIRS})
 
@@ -61,14 +62,8 @@ add_library(ooqpei
 	src/OoqpEigenInterface.cpp
 	src/QuadraticProblemFormulation.cpp 
 )
+add_dependencies(ooqpei ooqp_catkin)
 target_link_libraries(ooqpei 
-    ooqpgensparse 
-    ooqpsparse 
-    ooqpgondzio 
-    ooqpbase 
-    blas 
-    ma27 
-    gfortran
     ${catkin_LIBRARIES}
 )
 

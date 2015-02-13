@@ -10,13 +10,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>eigen</build_depend>
-  <build_depend>ooqpgensparse</build_depend>
-  <build_depend>ooqpsparse</build_depend>
-  <build_depend>ooqpgondzio</build_depend>
-  <build_depend>ooqpbase</build_depend>
-  <build_depend>blas</build_depend>
-  <build_depend>ma27</build_depend>
-  <build_depend>gfortran</build_depend>
-  
+  <build_depend>ooqp_catkin</build_depend>
+  <run_depend>ooqp_catkin</run_depend>
   <test_depend>gtest</test_depend>
 </package>
