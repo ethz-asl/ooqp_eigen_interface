@@ -80,4 +80,7 @@ catkin_add_gtest(test_ooqpei
     test/OoqpEigenInterface_test.cpp
     test/QuadraticProblemFormulation_test.cpp
 )
-target_link_libraries(test_ooqpei ooqpei)
+target_link_libraries(test_ooqpei 
+    ooqpei 
+    ${catkin_LIBRARIES}
+)
