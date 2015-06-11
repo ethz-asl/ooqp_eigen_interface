@@ -27,45 +27,30 @@ Installation
 - [OOQP]: Object-oriented software for quadratic programming,
 - [Eigen]: Linear algebra library.
 
-### Building and Installing
+### Building
 
-To build and install the OOQP-Eigen interface:
+This version uses [Catkin] as build system. There is a [CMake] version in the [cmake](https://github.com/ethz-asl/ooqp_eigen_interface/tree/cmake) branch.
 
-	mkdir build
-	cd build
-	cmake ..
-	sudo make install
-	
-	
+To build, clone the latest version from this repository into your catkin workspace and compile the package using
+
+	cd catkin_ws/src
+	git clone https://github.com/ethz-asl/ooqp_eigen_interface.git
+	cd ../
+	catkin_make
+
+
 Usage
 ------------
 
-Add the following to the CMakeLists.txt of your project:
-
-	find_package(OOQPEI REQUIRED)
-	
-Then, add `${OOQPEI_INCLUDE_DIRS}` this to the *include_directories* and `${OOQEI_LIBRARIES}` to the *add_libraries*.
+TODO: Add an example project.
 
 
 Unit Tests
 ------------
 
-Unit tests are built as soon as the folder gtest exists in the root folder.
+Run the unit tests with
 
-Download Google Test:
-
-	wget http://googletest.googlecode.com/files/gtest-1.7.0.zip
-	unzip gtest-1.7.0.zip
-	ln -s gtest-1.7.0 gtest
-	rm gtest-1.7.0.zip
-	
-To build and run the unit tests:
-
-	mkdir build
-	cd build
-	cmake ..
-	make
-	make check
+	catkin_make run_tests_ooqp_eigen_interface run_tests_ooqp_eigen_interface
 
 
 Bugs & Feature Requests
@@ -76,3 +61,5 @@ Please report bugs and request features using the [Issue Tracker](https://github
 
 [OOQP]: http://pages.cs.wisc.edu/~swright/ooqp/
 [Eigen]: http://eigen.tuxfamily.org
+[Catkin]: https://github.com/ros/catkin
+[CMake]: http://www.cmake.org/
