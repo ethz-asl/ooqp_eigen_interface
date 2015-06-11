@@ -220,6 +220,18 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
 }
 
 bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                               Eigen::VectorXd& c,
+                               Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                               Eigen::VectorXd& f,
+                               Eigen::VectorXd& x)
+{
+  SparseMatrix<double, Eigen::RowMajor> A;
+  VectorXd b;
+  VectorXd d = -std::numeric_limits<double>::max() * VectorXd::Ones(C.rows());
+  return solve(Q, c, A, b, C, d, f, x);
+}
+
+bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
                           Eigen::VectorXd& c, Eigen::VectorXd& x)
 {
   SparseMatrix<double, Eigen::RowMajor> A, C;
@@ -302,3 +314,4 @@ void OoqpEigenInterface::printSolution(int& status, Eigen::VectorXd& x)
 }
 
 } /* namespace ooqpei */
+

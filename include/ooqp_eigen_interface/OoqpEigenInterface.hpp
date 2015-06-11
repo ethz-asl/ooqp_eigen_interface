@@ -120,6 +120,21 @@ class OoqpEigenInterface
                     Eigen::VectorXd& x);
 
   /*!
+   * Solve min 1/2 x' Q x + c' x, such that Cx <= f
+   * @param [in] Q a symmetric positive semidefinite matrix (nxn)
+   * @param [in] c a vector (nx1)
+   * @param [in] C a (possibly null) matrices (m_cxn)
+   * @param [in] f a vector (m_cx1)
+   * @param [out] x a vector of variables (nx1)
+   * @return true if successful
+   */
+  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                    Eigen::VectorXd& c,
+                    Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                    Eigen::VectorXd& f,
+                    Eigen::VectorXd& x);
+
+  /*!
    * Solve min 1/2 x' Q x + c' x
    * @param [in] Q a symmetric positive semidefinite matrix (nxn)
    * @param [in] c a vector (nx1)
