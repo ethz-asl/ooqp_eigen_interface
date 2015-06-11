@@ -50,7 +50,7 @@ Unit Tests
 
 Run the unit tests with
 
-	catkin_make run_tests_ooqp_eigen_interface run_tests_ooqp_eigen_interface
+	catkin_make run_tests_ooqp_eigen_interface
 
 
 Bugs & Feature Requests
@@ -61,5 +61,5 @@ Please report bugs and request features using the [Issue Tracker](https://github
 
 [OOQP]: http://pages.cs.wisc.edu/~swright/ooqp/
 [Eigen]: http://eigen.tuxfamily.org
-[Catkin]: https://github.com/ros/catkin
+[Catkin]: http://wiki.ros.org/catkin
 [CMake]: http://www.cmake.org/
