@@ -142,6 +142,22 @@ namespace ooqpei { namespace eigen {
       }
     
     
+#define ASSERT_DOUBLE_SPARSE_MX_EQ(A, B, PERCENT_TOLERANCE, MSG)       \
+    ASSERT_EQ((size_t)(A).rows(), (size_t)(B).rows())  << MSG << "\nMatrix " << #A << ":\n" << A << "\nand matrix " << #B << "\n" << B << "\nare not the same size"; \
+    ASSERT_EQ((size_t)(A).cols(), (size_t)(B).cols())  << MSG << "\nMatrix " << #A << ":\n" << A << "\nand matrix " << #B << "\n" << B << "\nare not the same size"; \
+    for(int r = 0; r < (A).rows(); r++)                 \
+      {                                 \
+    for(int c = 0; c < (A).cols(); c++)               \
+      {                               \
+      double percentError = 0.0;                  \
+      ASSERT_TRUE(ooqpei::eigen::compareRelative( (A).coeff(r,c), (B).coeff(r,c), PERCENT_TOLERANCE, &percentError)) \
+        << MSG << "\nComparing:\n"                \
+        << #A << "(" << r << "," << c << ") = " << (A).coeff(r,c) << std::endl \
+        << #B << "(" << r << "," << c << ") = " << (B).coeff(r,c) << std::endl \
+        << "Error was " << percentError << "% > " << PERCENT_TOLERANCE << "%\n" \
+        << "\nMatrix " << #A << ":\n" << A << "\nand matrix " << #B << "\n" << B; \
+      }                               \
+      }
 
 
 
