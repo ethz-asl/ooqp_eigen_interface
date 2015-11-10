@@ -65,7 +65,8 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
                           Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
                           Eigen::VectorXd& d, Eigen::VectorXd& f,
                           Eigen::VectorXd& l, Eigen::VectorXd& u,
-                          Eigen::VectorXd& x)
+                          Eigen::VectorXd& x,
+                          bool ignoreUnknownError)
 {
   // Initialize.
   int nx = Q.rows();  // nx is the number of primal variables (x).
@@ -178,7 +179,7 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   // Solve.
   int status = s->solve(prob, vars, resid);
 
-  if (status == SUCCESSFUL_TERMINATION)
+  if (ignoreUnknownError || (status == SUCCESSFUL_TERMINATION))
     vars->x->copyIntoArray(&x.coeffRef(0));
 
   if(isInDebugMode()) printSolution(status, x);
@@ -190,7 +191,7 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   delete prob;
   delete qp;
 
-  return (status == SUCCESSFUL_TERMINATION);
+  return (status == SUCCESSFUL_TERMINATION || (ignoreUnknownError && (status == UNKNOWN)));
 }
 
 bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
@@ -199,12 +200,13 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
                           Eigen::VectorXd& b,
                           Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
                           Eigen::VectorXd& d, Eigen::VectorXd& f,
-                          Eigen::VectorXd& x)
+                          Eigen::VectorXd& x,
+                          bool ignoreUnknownError)
 {
   int nx = Q.rows();
   VectorXd u = std::numeric_limits<double>::max() * VectorXd::Ones(nx);
   VectorXd l = (-u.array()).matrix();
-  return solve(Q, c, A, b, C, d, f, l, u, x);
+  return solve(Q, c, A, b, C, d, f, l, u, x, ignoreUnknownError);
 }
 
 bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
@@ -212,31 +214,34 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
                           Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
                           Eigen::VectorXd& b,
                           Eigen::VectorXd& l, Eigen::VectorXd& u,
-                          Eigen::VectorXd& x)
+                          Eigen::VectorXd& x,
+                          bool ignoreUnknownError)
 {
   SparseMatrix<double, Eigen::RowMajor> C;
   VectorXd d, f;
-  return solve(Q, c, A, b, C, d, f, l, u, x);
+  return solve(Q, c, A, b, C, d, f, l, u, x, ignoreUnknownError);
 }
 
 bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
                                Eigen::VectorXd& c,
                                Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
                                Eigen::VectorXd& f,
-                               Eigen::VectorXd& x)
+                               Eigen::VectorXd& x,
+                               bool ignoreUnknownError)
 {
   SparseMatrix<double, Eigen::RowMajor> A;
   VectorXd b;
   VectorXd d = -std::numeric_limits<double>::max() * VectorXd::Ones(C.rows());
-  return solve(Q, c, A, b, C, d, f, x);
+  return solve(Q, c, A, b, C, d, f, x, ignoreUnknownError);
 }
 
 bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                          Eigen::VectorXd& c, Eigen::VectorXd& x)
+                          Eigen::VectorXd& c, Eigen::VectorXd& x,
+                          bool ignoreUnknownError)
 {
   SparseMatrix<double, Eigen::RowMajor> A, C;
   VectorXd b, d, f;
-  return solve(Q, c, A, b, C, d, f, x);
+  return solve(Q, c, A, b, C, d, f, x, ignoreUnknownError);
 }
 
 void OoqpEigenInterface::generateLimits(

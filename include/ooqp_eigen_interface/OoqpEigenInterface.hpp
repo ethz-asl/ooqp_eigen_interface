@@ -79,7 +79,8 @@ class OoqpEigenInterface
                     Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
                     Eigen::VectorXd& d, Eigen::VectorXd& f,
                     Eigen::VectorXd& l, Eigen::VectorXd& u,
-                    Eigen::VectorXd& x);
+                    Eigen::VectorXd& x,
+                    bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x, such that A x = b, and d <= Cx <= f
@@ -99,7 +100,8 @@ class OoqpEigenInterface
                     Eigen::VectorXd& b,
                     Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
                     Eigen::VectorXd& d, Eigen::VectorXd& f,
-                    Eigen::VectorXd& x);
+                    Eigen::VectorXd& x,
+                    bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x, such that A x = b, and l <= x <= u.
@@ -117,7 +119,8 @@ class OoqpEigenInterface
                     Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
                     Eigen::VectorXd& b,
                     Eigen::VectorXd& l, Eigen::VectorXd& u,
-                    Eigen::VectorXd& x);
+                    Eigen::VectorXd& x,
+                    bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x, such that Cx <= f
@@ -132,7 +135,8 @@ class OoqpEigenInterface
                     Eigen::VectorXd& c,
                     Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
                     Eigen::VectorXd& f,
-                    Eigen::VectorXd& x);
+                    Eigen::VectorXd& x,
+                    bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x
@@ -143,7 +147,8 @@ class OoqpEigenInterface
    */
   static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
                     Eigen::VectorXd& c,
-                    Eigen::VectorXd& x);
+                    Eigen::VectorXd& x,
+                    bool ignoreUnknownError = false);
 
   /*!
    * Change to true to print debug information.
