@@ -179,7 +179,7 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   // Solve.
   int status = s->solve(prob, vars, resid);
 
-  if (ignoreUnknownError || (status == SUCCESSFUL_TERMINATION))
+  if ((status == SUCCESSFUL_TERMINATION) || (ignoreUnknownError && (status == UNKNOWN)))
     vars->x->copyIntoArray(&x.coeffRef(0));
 
   if(isInDebugMode()) printSolution(status, x);
@@ -191,7 +191,7 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   delete prob;
   delete qp;
 
-  return (status == SUCCESSFUL_TERMINATION || (ignoreUnknownError && (status == UNKNOWN)));
+  return ((status == SUCCESSFUL_TERMINATION) || (ignoreUnknownError && (status == UNKNOWN)));
 }
 
 bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
