@@ -39,14 +39,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ooqp_eigen_interface)
 
-# Set the build type.  Options are:
-#  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage
-#  Debug          : w/ debug symbols, w/o optimization
-#  Release        : w/o debug symbols, w/ optimization
-#  RelWithDebInfo : w/ debug symbols, w/ optimization
-#  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
-
 add_definitions(-std=c++11)
 
 find_package(Eigen3 REQUIRED)
