@@ -72,15 +72,15 @@ class OoqpEigenInterface
    * @param [out] x a vector of variables (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                    Eigen::VectorXd& c,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                    Eigen::VectorXd& b,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
-                    Eigen::VectorXd& d, Eigen::VectorXd& f,
-                    Eigen::VectorXd& l, Eigen::VectorXd& u,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                    const Eigen::VectorXd& c,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                    const Eigen::VectorXd& b,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                    const Eigen::VectorXd& d, const Eigen::VectorXd& f,
+                    const Eigen::VectorXd& l, const Eigen::VectorXd& u,
                     Eigen::VectorXd& x,
-                    bool ignoreUnknownError = false);
+                    const bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x, such that A x = b, and d <= Cx <= f
@@ -94,14 +94,14 @@ class OoqpEigenInterface
    * @param [out] x a vector of variables (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                    Eigen::VectorXd& c,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                    Eigen::VectorXd& b,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
-                    Eigen::VectorXd& d, Eigen::VectorXd& f,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                    const Eigen::VectorXd& c,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                    const Eigen::VectorXd& b,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                    const Eigen::VectorXd& d, const Eigen::VectorXd& f,
                     Eigen::VectorXd& x,
-                    bool ignoreUnknownError = false);
+                    const bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x, such that A x = b, and l <= x <= u.
@@ -114,13 +114,13 @@ class OoqpEigenInterface
    * @param [out] x a vector of variables (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                    Eigen::VectorXd& c,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                    Eigen::VectorXd& b,
-                    Eigen::VectorXd& l, Eigen::VectorXd& u,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                    const Eigen::VectorXd& c,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                    const Eigen::VectorXd& b,
+                    const Eigen::VectorXd& l, const Eigen::VectorXd& u,
                     Eigen::VectorXd& x,
-                    bool ignoreUnknownError = false);
+                    const bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x, such that Cx <= f
@@ -131,12 +131,12 @@ class OoqpEigenInterface
    * @param [out] x a vector of variables (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                    Eigen::VectorXd& c,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
-                    Eigen::VectorXd& f,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                    const Eigen::VectorXd& c,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                    const Eigen::VectorXd& f,
                     Eigen::VectorXd& x,
-                    bool ignoreUnknownError = false);
+                    const bool ignoreUnknownError = false);
 
   /*!
    * Solve min 1/2 x' Q x + c' x
@@ -145,10 +145,10 @@ class OoqpEigenInterface
    * @param [out] x a vector of variables (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                    Eigen::VectorXd& c,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                    const Eigen::VectorXd& c,
                     Eigen::VectorXd& x,
-                    bool ignoreUnknownError = false);
+                    const bool ignoreUnknownError = false);
 
   /*!
    * Change to true to print debug information.
@@ -175,17 +175,17 @@ class OoqpEigenInterface
                       Eigen::VectorXd& lowerLimit, Eigen::VectorXd& upperLimit);
 
   static void printProblemFormulation(
-      Eigen::SparseMatrix<double, Eigen::RowMajor>& Q, Eigen::VectorXd& c,
-      Eigen::SparseMatrix<double, Eigen::RowMajor>& A, Eigen::VectorXd& b,
-      Eigen::SparseMatrix<double, Eigen::RowMajor>& C, Eigen::VectorXd& d, Eigen::VectorXd& f,
-      Eigen::VectorXd& l, Eigen::VectorXd& u);
+      const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q, const Eigen::VectorXd& c,
+      const Eigen::SparseMatrix<double, Eigen::RowMajor>& A, const Eigen::VectorXd& b,
+      const Eigen::SparseMatrix<double, Eigen::RowMajor>& C, const Eigen::VectorXd& d, const Eigen::VectorXd& f,
+      const Eigen::VectorXd& l, const Eigen::VectorXd& u);
 
-  static void printLimits(Eigen::Matrix<char, Eigen::Dynamic, 1>& useLowerLimit,
-                          Eigen::Matrix<char, Eigen::Dynamic, 1>& useUpperLimit,
-                          Eigen::VectorXd& lowerLimit,
-                          Eigen::VectorXd& upperLimit);
+  static void printLimits(const Eigen::Matrix<char, Eigen::Dynamic, 1>& useLowerLimit,
+                          const Eigen::Matrix<char, Eigen::Dynamic, 1>& useUpperLimit,
+                          const Eigen::VectorXd& lowerLimit,
+                          const Eigen::VectorXd& upperLimit);
 
-  static void printSolution(int& status, Eigen::VectorXd& x);
+  static void printSolution(const int status, const Eigen::VectorXd& x);
 
  private:
   static bool isInDebugMode_;
