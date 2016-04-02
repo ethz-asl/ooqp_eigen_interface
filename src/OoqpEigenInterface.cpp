@@ -58,42 +58,48 @@ namespace ooqpei {
 
 bool OoqpEigenInterface::isInDebugMode_ = false;
 
-bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                          Eigen::VectorXd& c,
-                          Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                          Eigen::VectorXd& b,
-                          Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
-                          Eigen::VectorXd& d, Eigen::VectorXd& f,
-                          Eigen::VectorXd& l, Eigen::VectorXd& u,
-                          Eigen::VectorXd& x,
-                          bool ignoreUnknownError)
+bool OoqpEigenInterface::solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                               const Eigen::VectorXd& c,
+                               const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                               const Eigen::VectorXd& b,
+                               const Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                               const Eigen::VectorXd& d, const Eigen::VectorXd& f,
+                               const Eigen::VectorXd& l, const Eigen::VectorXd& u,
+                               Eigen::VectorXd& x,
+                               const bool ignoreUnknownError)
 {
   // Initialize.
   int nx = Q.rows();  // nx is the number of primal variables (x).
   OOQPEI_ASSERT_GT(range_error, nx, 0, "Matrix Q has size 0.");
   x.setZero(nx);
 
+  // Make copies of variables that are changed.
+  auto ccopy(c);
+  auto Acopy(A);
+  auto bcopy(b);
+  auto Ccopy(C);
+
   // Make sure Q is in lower triangular form (Q is symmetric).
   // Refer to OOQP user guide section 2.2 (p. 11).
   // TODO Check if Q is really symmetric.
   SparseMatrix<double, Eigen::RowMajor> Q_triangular = Q.triangularView<Lower>();
 
-  if (isInDebugMode()) printProblemFormulation(Q_triangular, c, A, b, C, d, f, l, u);
+  if (isInDebugMode()) printProblemFormulation(Q_triangular, ccopy, Acopy, bcopy, Ccopy, d, f, l, u);
 
   // Compress sparse Eigen matrices (refer to Eigen Sparse Matrix user manual).
   Q_triangular.makeCompressed();
-  A.makeCompressed();
-  C.makeCompressed();
+  Acopy.makeCompressed();
+  Ccopy.makeCompressed();
 
   // Check matrices.
-  OOQPEI_ASSERT_EQ(range_error, c.size(), nx, "Vector c has wrong size.");
+  OOQPEI_ASSERT_EQ(range_error, ccopy.size(), nx, "Vector c has wrong size.");
   OOQPEI_ASSERT_EQ(range_error, l.size(), nx, "Vector l has wrong size.");
   OOQPEI_ASSERT_EQ(range_error, u.size(), nx, "Vector u has wrong size.");
-  OOQPEI_ASSERT_EQ(range_error, b.size(), A.rows(), "Vector b has wrong size.");
-  if (A.size() > 0) OOQPEI_ASSERT_EQ(range_error, A.cols(), nx, "Matrix A has wrong size.");
-  OOQPEI_ASSERT_EQ(range_error, d.size(), C.rows(), "Vector d has wrong size.");
-  OOQPEI_ASSERT_EQ(range_error, f.size(), C.rows(), "Vector f has wrong size.");
-  if (C.size() > 0) OOQPEI_ASSERT_EQ(range_error, C.cols(), nx, "Matrix C has wrong size.");
+  OOQPEI_ASSERT_EQ(range_error, bcopy.size(), Acopy.rows(), "Vector b has wrong size.");
+  if (Acopy.size() > 0) OOQPEI_ASSERT_EQ(range_error, Acopy.cols(), nx, "Matrix A has wrong size.");
+  OOQPEI_ASSERT_EQ(range_error, d.size(), Ccopy.rows(), "Vector d has wrong size.");
+  OOQPEI_ASSERT_EQ(range_error, f.size(), Ccopy.rows(), "Vector f has wrong size.");
+  if (Ccopy.size() > 0) OOQPEI_ASSERT_EQ(range_error, Ccopy.cols(), nx, "Matrix C has wrong size.");
 
   // Determine which limits are active and which are not.
   // Refer to OOQP user guide section 2.2 (p. 10).
@@ -130,16 +136,16 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   // Refer to OOQP user guide section 2.3 (p. 14).
 
   // Initialize new problem formulation.
-  int my = b.size();
+  int my = bcopy.size();
   int mz = lowerLimitForInequalityConstraints.size();
   int nnzQ = Q_triangular.nonZeros();
-  int nnzA = A.nonZeros();
-  int nnzC = C.nonZeros();
+  int nnzA = Acopy.nonZeros();
+  int nnzC = Ccopy.nonZeros();
 
   QpGenSparseMa27 * qp = new QpGenSparseMa27(nx, my, mz, nnzQ, nnzA, nnzC);
 
   // Fill in problem data.
-  double* cp   = &c.coeffRef(0);
+  double* cp   = &ccopy.coeffRef(0);
   int* krowQ   =  Q_triangular.outerIndexPtr();
   int* jcolQ   =  Q_triangular.innerIndexPtr();
   double* dQ   =  Q_triangular.valuePtr();
@@ -147,13 +153,13 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   char* ixlow  = &useLowerLimitForX.coeffRef(0);
   double* xupp = &upperLimitForX.coeffRef(0);
   char* ixupp  = &useUpperLimitForX.coeffRef(0);
-  int* krowA   =  A.outerIndexPtr();
-  int* jcolA   =  A.innerIndexPtr();
-  double* dA   =  A.valuePtr();
-  double* bA   = &b.coeffRef(0);
-  int* krowC   =  C.outerIndexPtr();
-  int* jcolC   =  C.innerIndexPtr();
-  double* dC   =  C.valuePtr();
+  int* krowA   =  Acopy.outerIndexPtr();
+  int* jcolA   =  Acopy.innerIndexPtr();
+  double* dA   =  Acopy.valuePtr();
+  double* bA   = &bcopy.coeffRef(0);
+  int* krowC   =  Ccopy.outerIndexPtr();
+  int* jcolC   =  Ccopy.innerIndexPtr();
+  double* dC   =  Ccopy.valuePtr();
   double* clow = &lowerLimitForInequalityConstraints.coeffRef(0);
   char* iclow  = &useLowerLimitForInequalityConstraints.coeffRef(0);
   double* cupp = &upperLimitForInequalityConstraints.coeffRef(0);
@@ -194,14 +200,14 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   return ((status == SUCCESSFUL_TERMINATION) || (ignoreUnknownError && (status == UNKNOWN)));
 }
 
-bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                          Eigen::VectorXd& c,
-                          Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                          Eigen::VectorXd& b,
-                          Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
-                          Eigen::VectorXd& d, Eigen::VectorXd& f,
-                          Eigen::VectorXd& x,
-                          bool ignoreUnknownError)
+bool OoqpEigenInterface::solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                               const Eigen::VectorXd& c,
+                               const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                               const Eigen::VectorXd& b,
+                               const Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                               const Eigen::VectorXd& d, const Eigen::VectorXd& f,
+                               Eigen::VectorXd& x,
+                               const bool ignoreUnknownError)
 {
   int nx = Q.rows();
   VectorXd u = std::numeric_limits<double>::max() * VectorXd::Ones(nx);
@@ -209,25 +215,25 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   return solve(Q, c, A, b, C, d, f, l, u, x, ignoreUnknownError);
 }
 
-bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                          Eigen::VectorXd& c,
-                          Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                          Eigen::VectorXd& b,
-                          Eigen::VectorXd& l, Eigen::VectorXd& u,
-                          Eigen::VectorXd& x,
-                          bool ignoreUnknownError)
+bool OoqpEigenInterface::solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                               const Eigen::VectorXd& c,
+                               const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                               const Eigen::VectorXd& b,
+                               const Eigen::VectorXd& l, const Eigen::VectorXd& u,
+                               Eigen::VectorXd& x,
+                               const bool ignoreUnknownError)
 {
   SparseMatrix<double, Eigen::RowMajor> C;
   VectorXd d, f;
   return solve(Q, c, A, b, C, d, f, l, u, x, ignoreUnknownError);
 }
 
-bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                               Eigen::VectorXd& c,
-                               Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
-                               Eigen::VectorXd& f,
+bool OoqpEigenInterface::solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                               const Eigen::VectorXd& c,
+                               const Eigen::SparseMatrix<double, Eigen::RowMajor>& C,
+                               const Eigen::VectorXd& f,
                                Eigen::VectorXd& x,
-                               bool ignoreUnknownError)
+                               const bool ignoreUnknownError)
 {
   SparseMatrix<double, Eigen::RowMajor> A;
   VectorXd b;
@@ -235,9 +241,10 @@ bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
   return solve(Q, c, A, b, C, d, f, x, ignoreUnknownError);
 }
 
-bool OoqpEigenInterface::solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
-                          Eigen::VectorXd& c, Eigen::VectorXd& x,
-                          bool ignoreUnknownError)
+bool OoqpEigenInterface::solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q,
+                               const Eigen::VectorXd& c,
+                               Eigen::VectorXd& x,
+                               const bool ignoreUnknownError)
 {
   SparseMatrix<double, Eigen::RowMajor> A, C;
   VectorXd b, d, f;
@@ -272,10 +279,10 @@ void OoqpEigenInterface::generateLimits(
 }
 
 void OoqpEigenInterface::printProblemFormulation(
-    Eigen::SparseMatrix<double, Eigen::RowMajor>& Q, Eigen::VectorXd& c,
-    Eigen::SparseMatrix<double, Eigen::RowMajor>& A, Eigen::VectorXd& b,
-    Eigen::SparseMatrix<double, Eigen::RowMajor>& C, Eigen::VectorXd& d, Eigen::VectorXd& f,
-    Eigen::VectorXd& l, Eigen::VectorXd& u)
+    const Eigen::SparseMatrix<double, Eigen::RowMajor>& Q, const Eigen::VectorXd& c,
+    const Eigen::SparseMatrix<double, Eigen::RowMajor>& A, const Eigen::VectorXd& b,
+    const Eigen::SparseMatrix<double, Eigen::RowMajor>& C, const Eigen::VectorXd& d, const Eigen::VectorXd& f,
+    const Eigen::VectorXd& l, const Eigen::VectorXd& u)
 {
   cout << "-------------------------------" << endl;
   cout << "Find x: min 1/2 x' Q x + c' x such that A x = b, d <= Cx <= f, and l <= x <= u" << endl << endl;
@@ -291,9 +298,9 @@ void OoqpEigenInterface::printProblemFormulation(
 }
 
 void OoqpEigenInterface::printLimits(
-    Eigen::Matrix<char, Eigen::Dynamic, 1>& useLowerLimit,
-    Eigen::Matrix<char, Eigen::Dynamic, 1>& useUpperLimit,
-    Eigen::VectorXd& lowerLimit, Eigen::VectorXd& upperLimit)
+    const Eigen::Matrix<char, Eigen::Dynamic, 1>& useLowerLimit,
+    const Eigen::Matrix<char, Eigen::Dynamic, 1>& useUpperLimit,
+    const Eigen::VectorXd& lowerLimit, const Eigen::VectorXd& upperLimit)
 {
   cout << "useLowerLimit << " << std::boolalpha << useLowerLimit.cast<bool>().transpose() << endl;
   cout << "lowerLimit << " << lowerLimit.transpose() << endl;
@@ -301,7 +308,7 @@ void OoqpEigenInterface::printLimits(
   cout << "upperLimit << " << upperLimit.transpose() << endl;
 }
 
-void OoqpEigenInterface::printSolution(int& status, Eigen::VectorXd& x)
+void OoqpEigenInterface::printSolution(const int status, const Eigen::VectorXd& x)
 {
   if (status == 0)
   {

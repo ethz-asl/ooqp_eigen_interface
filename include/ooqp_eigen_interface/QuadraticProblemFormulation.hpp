@@ -65,12 +65,12 @@ class QuadraticProblemFormulation
    * @param [out] x a vector (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                    Eigen::DiagonalMatrix<double, Eigen::Dynamic>& S, Eigen::VectorXd& b,
-                    Eigen::DiagonalMatrix<double, Eigen::Dynamic>& W,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& C, Eigen::VectorXd& c,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& D,
-                    Eigen::VectorXd& d, Eigen::VectorXd& f,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                    const Eigen::DiagonalMatrix<double, Eigen::Dynamic>& S, const Eigen::VectorXd& b,
+                    const Eigen::DiagonalMatrix<double, Eigen::Dynamic>& W,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& C, const Eigen::VectorXd& c,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& D,
+                    const Eigen::VectorXd& d, const Eigen::VectorXd& f,
                     Eigen::VectorXd& x);
 
   /*!
@@ -85,11 +85,11 @@ class QuadraticProblemFormulation
    * @param [out] x a vector (nx1)
    * @return true if successful
    */
-  static bool solve(Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
-                    Eigen::DiagonalMatrix<double, Eigen::Dynamic>& S, Eigen::VectorXd& b,
-                    Eigen::DiagonalMatrix<double, Eigen::Dynamic>& W,
-                    Eigen::SparseMatrix<double, Eigen::RowMajor>& D,
-                    Eigen::VectorXd& d, Eigen::VectorXd& f,
+  static bool solve(const Eigen::SparseMatrix<double, Eigen::RowMajor>& A,
+                    const Eigen::DiagonalMatrix<double, Eigen::Dynamic>& S, const Eigen::VectorXd& b,
+                    const Eigen::DiagonalMatrix<double, Eigen::Dynamic>& W,
+                    const Eigen::SparseMatrix<double, Eigen::RowMajor>& D,
+                    const Eigen::VectorXd& d, const Eigen::VectorXd& f,
                     Eigen::VectorXd& x);
 };
 
