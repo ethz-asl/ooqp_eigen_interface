@@ -70,8 +70,12 @@ bool QuadraticProblemFormulation::solve(
   OOQPEI_ASSERT_EQ(range_error, W.rows(), n, "Matrix W has wrong size.");
 
   Eigen::SparseMatrix<double, Eigen::RowMajor> Q_temp;
-  Q_temp = A.transpose() * S * A + (Eigen::SparseMatrix<double, Eigen::RowMajor>)W.toDenseMatrix().sparseView();
 
+#if EIGEN_VERSION_AT_LEAST(3,2,92)
+  Q_temp = A.transpose() * S * A + (Eigen::SparseMatrix<double, Eigen::RowMajor>)W.toDenseMatrix().sparseView();
+#else
+  Q_temp = A.transpose() * S * A + W.toDenseMatrix().sparseView();
+#endif
 
   VectorXd c_temp = -A.transpose() * S * b;
 
