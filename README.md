@@ -38,6 +38,18 @@ To build, clone the latest version from this repository into your catkin workspa
 	cd ../
 	catkin_make
 
+### Building using Findooqp.cmake
+Since ooqp_catkin can't be distributed, I modified this package to add a find_package command to search for ooqp on the system in the standard directories `usr/local/include` and `/usr/local/lib`. You need to build ooqp with the `-fPIC` option. To do so run:
+
+	export CXXFLAGS="-O -fPIC"
+	make -j4
+	sudo make install
+
+After that you can build using `catkin_make` or `catkin build`. If using the former change CMakeLists.txt
+
+	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/cmake")
+
+Otherwise leave `CMAKE_MODULE_PATH` alone.
 
 Usage
 ------------

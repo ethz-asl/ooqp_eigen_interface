@@ -10,7 +10,5 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>eigen</build_depend>
-  <build_depend>ooqp_catkin</build_depend>
-  <run_depend>ooqp_catkin</run_depend>
   <test_depend>gtest</test_depend>
 </package>
