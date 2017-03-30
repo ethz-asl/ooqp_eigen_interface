@@ -63,9 +63,10 @@ add_library(ooqpei
 	src/OoqpEigenInterface.cpp
 	src/QuadraticProblemFormulation.cpp
 )
-add_dependencies(ooqpei ooqp)
+#add_dependencies(ooqpei)
 target_link_libraries(ooqpei
     ${OOQP_LIBRARIES}
+    blas ma27 gfortran
     ${catkin_LIBRARIES}
 )
 

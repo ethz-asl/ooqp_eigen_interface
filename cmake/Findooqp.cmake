@@ -98,9 +98,18 @@ find_path(OOQP_INCLUDE_DIR NAMES
   HINTS /usr/local/include
 )
 
-find_library(OOQP_LIBRARY NAMES ooqpbase ooqpdense ooqpgensparse ooqpmehrotra
-  ooqpbound ooqpgendense ooqpgondzio ooqpsparse
-  HINTS /usr/local/lib
+set(LIB_DIR /usr/local/lib)
+
+find_library(OOQP_BASE NAMES ooqpbase HINTS ${LIB_DIR})
+find_library(OOQP_DENSE NAMES ooqpdense HINTS ${LIB_DIR})
+find_library(OOQP_GENSPARSE NAMES ooqpgensparse HINTS ${LIB_DIR})
+find_library(OOQP_MEHROTRA NAMES ooqpmehrotra HINTS ${LIB_DIR})
+find_library(OOQP_BOUND NAMES ooqpbound HINTS ${LIB_DIR})
+find_library(OOQP_GENDENSE NAMES ooqpgendense HINTS ${LIB_DIR})
+find_library(OOQP_GONDZIO NAMES ooqpgondzio HINTS ${LIB_DIR})
+find_library(OOQP_SPARSE NAMES ooqpsparse HINTS ${LIB_DIR})
+
+set(OOQP_LIBRARY ${OOQP_BASE} ${OOQP_DENSE} ${OOQP_GENSPARSE} ${OOQP_MEHROTRA} ${OOQP_BOUND} ${OOQP_GENDENSE} ${OOQP_GONDZIO} ${OOQP_SPARSE}
 )
 
 include(FindPackageHandleStandardArgs)
