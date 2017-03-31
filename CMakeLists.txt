@@ -38,31 +38,35 @@
 
 cmake_minimum_required(VERSION 2.8.3)
 project(ooqp_eigen_interface)
+set(CMAKE_VERBOSE_MAKEFILE on)
 
+set(CMAKE_CXX_FLAGS "-fPIC")
 add_definitions(-std=c++11)
 
 find_package(Eigen3 REQUIRED)
-find_package(catkin REQUIRED COMPONENTS
-    ooqp_catkin
-)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH} )
+find_package(ooqp REQUIRED)
+find_package(catkin REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
   LIBRARIES ooqpei
-  CATKIN_DEPENDS ooqp_catkin
-  DEPENDS 
+  DEPENDS
 )
 
 include_directories(include)
 include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(${catkin_INCLUDE_DIRS})
 
-add_library(ooqpei 
+add_library(ooqpei
 	src/OoqpEigenInterface.cpp
-	src/QuadraticProblemFormulation.cpp 
+	src/QuadraticProblemFormulation.cpp
 )
-add_dependencies(ooqpei ooqp_catkin)
-target_link_libraries(ooqpei 
+#add_dependencies(ooqpei)
+target_link_libraries(ooqpei
+    ${OOQP_LIBRARIES}
+    blas ma27 gfortran
     ${catkin_LIBRARIES}
 )
 
@@ -74,12 +78,13 @@ install(TARGETS ooqpei
 install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-catkin_add_gtest(test_ooqpei 
+catkin_add_gtest(test_ooqpei
     test/test_main.cpp
     test/OoqpEigenInterface_test.cpp
     test/QuadraticProblemFormulation_test.cpp
 )
-target_link_libraries(test_ooqpei 
-    ooqpei 
+target_link_libraries(test_ooqpei
+    ooqpei
+    ${OOQP_LIBRARIES}
     ${catkin_LIBRARIES}
 )

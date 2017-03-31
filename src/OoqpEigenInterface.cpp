@@ -42,12 +42,12 @@
 #include "ooqp_eigen_interface/OoqpEigenInterface.hpp"
 #include <stdexcept>
 #include "ooqp_eigen_interface/ooqpei_assert_macros.hpp"
-#include "QpGenData.h"
-#include "QpGenVars.h"
-#include "QpGenResiduals.h"
-#include "GondzioSolver.h"
-#include "QpGenSparseMa27.h"
-#include "Status.h"
+#include "ooqp/QpGenData.h"
+#include "ooqp/QpGenVars.h"
+#include "ooqp/QpGenResiduals.h"
+#include "ooqp/GondzioSolver.h"
+#include "ooqp/QpGenSparseMa27.h"
+#include "ooqp/Status.h"
 #include "ooqp_eigen_interface/ooqpei_numerical_comparisons.hpp"
 
 using namespace Eigen;
@@ -326,4 +326,3 @@ void OoqpEigenInterface::printSolution(const int status, const Eigen::VectorXd& 
 }
 
 } /* namespace ooqpei */
-
