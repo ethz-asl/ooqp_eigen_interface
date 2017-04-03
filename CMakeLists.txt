@@ -61,7 +61,7 @@ add_library(ooqpei
 	src/OoqpEigenInterface.cpp
 	src/QuadraticProblemFormulation.cpp 
 )
-add_dependencies(ooqpei ooqp_catkin)
+
 target_link_libraries(ooqpei 
     ${catkin_LIBRARIES}
 )
