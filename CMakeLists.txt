@@ -43,43 +43,50 @@ add_definitions(-std=c++11)
 
 find_package(Eigen3 REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
-    ooqp_catkin
+  ooqp_catkin
 )
 
 catkin_package(
-  INCLUDE_DIRS include ${EIGEN3_INCLUDE_DIR}
-  LIBRARIES ooqpei
-  CATKIN_DEPENDS ooqp_catkin
+  INCLUDE_DIRS
+    include
+    ${EIGEN3_INCLUDE_DIR}
+  LIBRARIES
+    ooqpei
+  CATKIN_DEPENDS
+    ooqp_catkin
   DEPENDS 
 )
 
 include_directories(include)
 include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(${catkin_INCLUDE_DIRS})
+include_directories(${ooqp_catkin_INCLUDE_DIRS}/ooqp_catkin)
 
 add_library(ooqpei 
-	src/OoqpEigenInterface.cpp
-	src/QuadraticProblemFormulation.cpp 
+  src/OoqpEigenInterface.cpp
+  src/QuadraticProblemFormulation.cpp
 )
 
 target_link_libraries(ooqpei 
-    ${catkin_LIBRARIES}
+  ${catkin_LIBRARIES}
 )
 
 install(TARGETS ooqpei
-        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 install(DIRECTORY include/${PROJECT_NAME}/
-        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
 
 catkin_add_gtest(test_ooqpei 
-    test/test_main.cpp
-    test/OoqpEigenInterface_test.cpp
-    test/QuadraticProblemFormulation_test.cpp
+  test/test_main.cpp
+  test/OoqpEigenInterface_test.cpp
+  test/QuadraticProblemFormulation_test.cpp
 )
 target_link_libraries(test_ooqpei 
-    ooqpei 
-    ${catkin_LIBRARIES}
+  ooqpei
+  ${catkin_LIBRARIES}
 )
