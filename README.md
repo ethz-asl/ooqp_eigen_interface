@@ -12,6 +12,8 @@ This C++ software provides a simple interface to use [OOQP] with the [Eigen] lin
 Contact: Péter Fankhauser, pfankhauser@ethz.ch<br />
 Affiliation: Autonomous Systems Lab, ETH Zurich
 
+[![Build Status](http://rsl-ci.ethz.ch/buildStatus/icon?job=ooqp_eigen_interface)](http://rsl-ci.ethz.ch/job/ooqp_eigen_interface/)
+
 ### Links
 
 * [OOQP User Guide](http://pages.cs.wisc.edu/~swright/ooqp/ooqp-userguide.pdf)
